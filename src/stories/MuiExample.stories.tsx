@@ -1,5 +1,4 @@
 import type { Meta, StoryFn } from '@storybook/react'
-import * as React from 'react'
 import Button from '@mui/material/Button'
 import AppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
