@@ -28,11 +28,12 @@ export default [
       storybook,
     },
     rules: {
-      ...js.configs.recommended.rules,
-      ...tseslint.configs.recommended.rules,
-      ...reactHooks.configs['recommended-latest'].rules,
-      ...reactRefresh.configs.vite.rules,
-      ...storybook.configs.recommended.rules,
+      // fall back to {} when a plugin config omits rules
+      ...(js.configs?.recommended?.rules ?? {}),
+      ...(tseslint.configs?.recommended?.rules ?? {}),
+      ...(reactHooks.configs?.['recommended-latest']?.rules ?? {}),
+      ...(reactRefresh.configs?.vite?.rules ?? {}),
+      ...(storybook.configs?.recommended?.rules ?? {}),
     },
   },
 ]
