@@ -18,6 +18,7 @@ const preview: Preview = {
           ['1.1 Colors', '1.2 Typography', '1.3 Grid', '1.4 Icon', '1.5 Radius', '1.6 Shadow'],
           '2. Components',
           ['2.1 Buttons', '2.2 Input', '2.3 Modal', '2.4 Checkbox', '2.5 RadioGroup', '2.6 Pagination', '2.7 Navigation', '2.8 Tab', '2.9 Tooltip', '2.10 Badge & Tag', '2.11 Card'],
+          'Example',
         ],
       },
     },
