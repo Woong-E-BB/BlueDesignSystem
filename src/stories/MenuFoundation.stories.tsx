@@ -35,6 +35,7 @@ const FIGMA_COLOR_STYLE_URL =
   'https://www.figma.com/design/ec2KdFeSwTGXsQaNySybLO/%EB%B8%94%EB%A3%A8%ED%8C%9C%EC%BD%94%EB%A6%AC%EC%95%84-%EB%94%94%EC%9E%90%EC%9D%B8%EC%8B%9C%EC%8A%A4%ED%85%9C?node-id=13-184&m=dev'
 
 const FIGMA_PRIMITIVE_COLOR_URL = FIGMA_COLOR_STYLE_URL
+const FIGMA_SEMANTIC_COLOR_URL = FIGMA_COLOR_STYLE_URL
 
 const isTokenValue = (value: TokenGroup | TokenValue): value is TokenValue =>
   typeof value === 'object' && value !== null && 'value' in value
@@ -160,6 +161,46 @@ export const PrimitiveColor: Story = {
           title="Figma Primitive Color Guide"
           src={`https://www.figma.com/embed?embed_host=storybook&url=${encodeURIComponent(
             FIGMA_PRIMITIVE_COLOR_URL
+          )}`}
+          style={{
+            position: 'absolute',
+            inset: 0,
+            width: '100%',
+            height: '100%',
+            border: 0,
+          }}
+          allowFullScreen
+        />
+      </div>
+    </div>
+  ),
+}
+
+export const SemanticColor: Story = {
+  name: '1.1.2 Semantic color',
+  render: () => (
+    <div style={{ padding: 16 }}>
+      <div style={{ marginBottom: 12 }}>
+        <h3 style={{ margin: '0 0 4px', fontSize: 16 }}>Semantic color</h3>
+        <p style={{ margin: 0, color: '#4b5563' }}>
+          Figma style guide embedded for semantic colors.
+        </p>
+      </div>
+      <div
+        style={{
+          position: 'relative',
+          width: '100%',
+          paddingTop: '62.5%',
+          borderRadius: 12,
+          overflow: 'hidden',
+          border: '1px solid #e5e7eb',
+          background: '#f8fafc',
+        }}
+      >
+        <iframe
+          title="Figma Semantic Color Guide"
+          src={`https://www.figma.com/embed?embed_host=storybook&url=${encodeURIComponent(
+            FIGMA_SEMANTIC_COLOR_URL
           )}`}
           style={{
             position: 'absolute',
