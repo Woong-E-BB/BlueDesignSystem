@@ -62,14 +62,12 @@ const FigmaEmbedPage = ({
 const FigmaEmbedLayout = ({
   title,
   description,
-  figmaUrl,
   cards,
   tokens,
   figmaFrames,
 }: {
   title: string
   description?: string
-  figmaUrl: string
   cards: InfoCard[]
   tokens: TokenInfo[]
   figmaFrames: FigmaFrame[]
