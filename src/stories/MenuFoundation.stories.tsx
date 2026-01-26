@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import type { Meta, StoryObj } from '@storybook/react'
 import colorTokens from '../tokens/figma/colors.json'
+import FigmaEmbedPage from './FigmaEmbedPage'
 
 type TokenValue = {
   value: string
@@ -39,7 +40,16 @@ const FIGMA_COLOR_STYLE_URL =
   'https://www.figma.com/design/ec2KdFeSwTGXsQaNySybLO/%EB%B8%94%EB%A3%A8%ED%8C%9C%EC%BD%94%EB%A6%AC%EC%95%84-%EB%94%94%EC%9E%90%EC%9D%B8%EC%8B%9C%EC%8A%A4%ED%85%9C?node-id=13-184&m=dev'
 
 const FIGMA_PRIMITIVE_COLOR_URL = FIGMA_COLOR_STYLE_URL
-const FIGMA_SEMANTIC_COLOR_URL = FIGMA_COLOR_STYLE_URL
+const FIGMA_SEMANTIC_COLOR_URL =
+  'https://www.figma.com/design/ec2KdFeSwTGXsQaNySybLO/%EB%B8%94%EB%A3%A8%ED%8C%9C%EC%BD%94%EB%A6%AC%EC%95%84-%EB%94%94%EC%9E%90%EC%9D%B8%EC%8B%9C%EC%8A%A4%ED%85%9C?node-id=265-936&m=dev'
+const FIGMA_TYPOGRAPHY_URL =
+  'https://www.figma.com/design/ec2KdFeSwTGXsQaNySybLO/%EB%B8%94%EB%A3%A8%ED%8C%9C%EC%BD%94%EB%A6%AC%EC%95%84-%EB%94%94%EC%9E%90%EC%9D%B8%EC%8B%9C%EC%8A%A4%ED%85%9C?node-id=2-5&m=dev'
+const FIGMA_GRID_URL =
+  'https://www.figma.com/design/ec2KdFeSwTGXsQaNySybLO/%EB%B8%94%EB%A3%A8%ED%8C%9C%EC%BD%94%EB%A6%AC%EC%95%84-%EB%94%94%EC%9E%90%EC%9D%B8%EC%8B%9C%EC%8A%A4%ED%85%9C?node-id=2-6&m=dev'
+const FIGMA_ICON_URL =
+  'https://www.figma.com/design/ec2KdFeSwTGXsQaNySybLO/%EB%B8%94%EB%A3%A8%ED%8C%9C%EC%BD%94%EB%A6%AC%EC%95%84-%EB%94%94%EC%9E%90%EC%9D%B8%EC%8B%9C%EC%8A%A4%ED%85%9C?node-id=2-7&m=dev'
+const FIGMA_RADIUS_URL =
+  'https://www.figma.com/design/ec2KdFeSwTGXsQaNySybLO/%EB%B8%94%EB%A3%A8%ED%8C%9C%EC%BD%94%EB%A6%AC%EC%95%84-%EB%94%94%EC%9E%90%EC%9D%B8%EC%8B%9C%EC%8A%A4%ED%85%9C?node-id=3-9&m=dev'
 
 const isTokenValue = (value: TokenGroup | TokenValue): value is TokenValue =>
   typeof value === 'object' && value !== null && 'value' in value
@@ -324,34 +334,46 @@ export const SemanticColor: Story = {
 
 export const Typography: Story = {
   name: '1.2 Typography',
-  args: {
-    title: 'Typography',
-    description: 'Type scale, font stacks, and text styles.',
-  },
+  render: () => (
+    <FigmaEmbedPage
+      title="Typography"
+      description="Type scale, font stacks, and text styles."
+      figmaUrl={FIGMA_TYPOGRAPHY_URL}
+    />
+  ),
 }
 
 export const Grid: Story = {
   name: '1.3 Grid',
-  args: {
-    title: 'Grid',
-    description: 'Layout grid rules and responsive breakpoints.',
-  },
+  render: () => (
+    <FigmaEmbedPage
+      title="Grid"
+      description="Layout grid rules and responsive breakpoints."
+      figmaUrl={FIGMA_GRID_URL}
+    />
+  ),
 }
 
 export const Icon: Story = {
   name: '1.4 Icon',
-  args: {
-    title: 'Icon',
-    description: 'Icon library usage and sizing rules.',
-  },
+  render: () => (
+    <FigmaEmbedPage
+      title="Icon"
+      description="Icon library usage and sizing rules."
+      figmaUrl={FIGMA_ICON_URL}
+    />
+  ),
 }
 
 export const Radius: Story = {
   name: '1.5 Radius',
-  args: {
-    title: 'Radius',
-    description: 'Corner radius scale and application examples.',
-  },
+  render: () => (
+    <FigmaEmbedPage
+      title="Radius"
+      description="Corner radius scale and application examples."
+      figmaUrl={FIGMA_RADIUS_URL}
+    />
+  ),
 }
 
 export const Shadow: Story = {
