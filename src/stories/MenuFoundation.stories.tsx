@@ -18,6 +18,7 @@ type FlattenedToken = {
   description?: string
   variable: string
   token: string
+  group: string
 }
 
 type SectionProps = {
@@ -53,6 +54,7 @@ const flattenTokens = (
   Object.entries(node).flatMap(([key, value]) => {
     if (isTokenValue(value)) {
       const tokenName = [...path, key].join('.')
+      const groupName = path[0] ?? tokenName
       return [
         {
           name: tokenName,
@@ -60,6 +62,7 @@ const flattenTokens = (
           description: value.description,
           variable: toCssVariable(tokenName),
           token: tokenName,
+          group: groupName,
         },
       ]
     }
@@ -73,15 +76,39 @@ const colorTokenRoot = (
 
 const flattenedColorTokens = flattenTokens(colorTokenRoot)
 
-const ColorTokensPage = () => {
+type RelatedEmbed = {
+  title: string
+  url: string
+}
+
+type ColorTokensPageProps = {
+  title: string
+  description?: string
+  figmaUrl: string
+  tokens: FlattenedToken[]
+  relatedEmbeds?: RelatedEmbed[]
+}
+
+const filterByGroups = (tokens: FlattenedToken[], groups: string[]) => {
+  const allowed = new Set(groups.map((group) => group.toLowerCase()))
+  return tokens.filter((token) => allowed.has(token.group.toLowerCase()))
+}
+
+const ColorTokensPage = ({
+  title,
+  description,
+  figmaUrl,
+  tokens,
+  relatedEmbeds = [],
+}: ColorTokensPageProps) => {
   const [query, setQuery] = useState('')
 
   const filteredTokens = useMemo(() => {
     const normalized = query.trim().toLowerCase()
     if (!normalized) {
-      return flattenedColorTokens
+      return tokens
     }
-    return flattenedColorTokens.filter((token) =>
+    return tokens.filter((token) =>
       [
         token.name,
         token.value,
@@ -98,10 +125,10 @@ const ColorTokensPage = () => {
   return (
     <div style={{ padding: 16 }}>
       <div style={{ marginBottom: 16 }}>
-        <h3 style={{ margin: '0 0 4px', fontSize: 18 }}>Colors</h3>
+        <h3 style={{ margin: '0 0 4px', fontSize: 18 }}>{title}</h3>
         <p style={{ margin: 0, color: '#4b5563' }}>
-          Figma color styles are mapped to Storybook tokens with per-chip
-          metadata.
+          {description ??
+            'Figma color styles are mapped to Storybook tokens with per-chip metadata.'}
         </p>
       </div>
       <div
@@ -131,36 +158,31 @@ const ColorTokensPage = () => {
               <div style={{ fontSize: 14, fontWeight: 600 }}>Figma layout</div>
               <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
                 <a
-                  href={FIGMA_COLOR_STYLE_URL}
+                  href={figmaUrl}
                   target="_blank"
                   rel="noreferrer"
                   style={{ fontSize: 12, color: '#2563eb' }}
                 >
                   Open in Figma
                 </a>
-                <a
-                  href={FIGMA_PRIMITIVE_COLOR_URL}
-                  target="_blank"
-                  rel="noreferrer"
-                  style={{ fontSize: 12, color: '#2563eb' }}
-                >
-                  1.1.1 Primitive color
-                </a>
-                <a
-                  href={FIGMA_SEMANTIC_COLOR_URL}
-                  target="_blank"
-                  rel="noreferrer"
-                  style={{ fontSize: 12, color: '#2563eb' }}
-                >
-                  1.1.2 Semantic color
-                </a>
+                {relatedEmbeds.map((embed) => (
+                  <a
+                    key={embed.title}
+                    href={embed.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    style={{ fontSize: 12, color: '#2563eb' }}
+                  >
+                    {embed.title}
+                  </a>
+                ))}
               </div>
             </div>
             <div style={{ position: 'relative', paddingTop: '72%' }}>
               <iframe
-                title="Figma Color Layout"
+                title={`Figma ${title} Layout`}
                 src={`https://www.figma.com/embed?embed_host=storybook&url=${encodeURIComponent(
-                  FIGMA_COLOR_STYLE_URL
+                  figmaUrl
                 )}`}
                 style={{
                   position: 'absolute',
@@ -171,74 +193,6 @@ const ColorTokensPage = () => {
                 }}
                 allowFullScreen
               />
-            </div>
-          </div>
-          <div
-            style={{
-              display: 'grid',
-              gap: 12,
-              marginTop: 12,
-            }}
-          >
-            <div
-              style={{
-                border: '1px solid #e5e7eb',
-                borderRadius: 12,
-                overflow: 'hidden',
-                background: '#ffffff',
-              }}
-            >
-              <div style={{ padding: 10, borderBottom: '1px solid #e2e8f0' }}>
-                <div style={{ fontSize: 13, fontWeight: 600 }}>
-                  1.1.1 Primitive color
-                </div>
-              </div>
-              <div style={{ position: 'relative', paddingTop: '56%' }}>
-                <iframe
-                  title="Figma Primitive Color Guide"
-                  src={`https://www.figma.com/embed?embed_host=storybook&url=${encodeURIComponent(
-                    FIGMA_PRIMITIVE_COLOR_URL
-                  )}`}
-                  style={{
-                    position: 'absolute',
-                    inset: 0,
-                    width: '100%',
-                    height: '100%',
-                    border: 0,
-                  }}
-                  allowFullScreen
-                />
-              </div>
-            </div>
-            <div
-              style={{
-                border: '1px solid #e5e7eb',
-                borderRadius: 12,
-                overflow: 'hidden',
-                background: '#ffffff',
-              }}
-            >
-              <div style={{ padding: 10, borderBottom: '1px solid #e2e8f0' }}>
-                <div style={{ fontSize: 13, fontWeight: 600 }}>
-                  1.1.2 Semantic color
-                </div>
-              </div>
-              <div style={{ position: 'relative', paddingTop: '56%' }}>
-                <iframe
-                  title="Figma Semantic Color Guide"
-                  src={`https://www.figma.com/embed?embed_host=storybook&url=${encodeURIComponent(
-                    FIGMA_SEMANTIC_COLOR_URL
-                  )}`}
-                  style={{
-                    position: 'absolute',
-                    inset: 0,
-                    width: '100%',
-                    height: '100%',
-                    border: 0,
-                  }}
-                  allowFullScreen
-                />
-              </div>
             </div>
           </div>
         </div>
@@ -333,86 +287,38 @@ type Story = StoryObj<typeof SectionPage>
 
 export const Colors: Story = {
   name: '1.1 Colors',
-  render: () => <ColorTokensPage />,
+  render: () => (
+    <ColorTokensPage
+      title="Colors"
+      figmaUrl={FIGMA_COLOR_STYLE_URL}
+      tokens={flattenedColorTokens}
+      relatedEmbeds={[
+        { title: '1.1.1 Primitive color', url: FIGMA_PRIMITIVE_COLOR_URL },
+        { title: '1.1.2 Semantic color', url: FIGMA_SEMANTIC_COLOR_URL },
+      ]}
+    />
+  ),
 }
 
 export const PrimitiveColor: Story = {
   name: '1.1.1 Primitive color',
   render: () => (
-    <div style={{ padding: 16 }}>
-      <div style={{ marginBottom: 12 }}>
-        <h3 style={{ margin: '0 0 4px', fontSize: 16 }}>Primitive color</h3>
-        <p style={{ margin: 0, color: '#4b5563' }}>
-          Figma style guide embedded for primitive colors.
-        </p>
-      </div>
-      <div
-        style={{
-          position: 'relative',
-          width: '100%',
-          paddingTop: '62.5%',
-          borderRadius: 12,
-          overflow: 'hidden',
-          border: '1px solid #e5e7eb',
-          background: '#f8fafc',
-        }}
-      >
-        <iframe
-          title="Figma Primitive Color Guide"
-          src={`https://www.figma.com/embed?embed_host=storybook&url=${encodeURIComponent(
-            FIGMA_PRIMITIVE_COLOR_URL
-          )}`}
-          style={{
-            position: 'absolute',
-            inset: 0,
-            width: '100%',
-            height: '100%',
-            border: 0,
-          }}
-          allowFullScreen
-        />
-      </div>
-    </div>
+    <ColorTokensPage
+      title="Primitive color"
+      figmaUrl={FIGMA_PRIMITIVE_COLOR_URL}
+      tokens={filterByGroups(flattenedColorTokens, ['brand', 'neutral'])}
+    />
   ),
 }
 
 export const SemanticColor: Story = {
   name: '1.1.2 Semantic color',
   render: () => (
-    <div style={{ padding: 16 }}>
-      <div style={{ marginBottom: 12 }}>
-        <h3 style={{ margin: '0 0 4px', fontSize: 16 }}>Semantic color</h3>
-        <p style={{ margin: 0, color: '#4b5563' }}>
-          Figma style guide embedded for semantic colors.
-        </p>
-      </div>
-      <div
-        style={{
-          position: 'relative',
-          width: '100%',
-          paddingTop: '62.5%',
-          borderRadius: 12,
-          overflow: 'hidden',
-          border: '1px solid #e5e7eb',
-          background: '#f8fafc',
-        }}
-      >
-        <iframe
-          title="Figma Semantic Color Guide"
-          src={`https://www.figma.com/embed?embed_host=storybook&url=${encodeURIComponent(
-            FIGMA_SEMANTIC_COLOR_URL
-          )}`}
-          style={{
-            position: 'absolute',
-            inset: 0,
-            width: '100%',
-            height: '100%',
-            border: 0,
-          }}
-          allowFullScreen
-        />
-      </div>
-    </div>
+    <ColorTokensPage
+      title="Semantic color"
+      figmaUrl={FIGMA_SEMANTIC_COLOR_URL}
+      tokens={filterByGroups(flattenedColorTokens, ['status'])}
+    />
   ),
 }
 
