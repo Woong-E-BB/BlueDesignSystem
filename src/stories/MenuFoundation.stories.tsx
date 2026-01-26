@@ -112,64 +112,134 @@ const ColorTokensPage = () => {
           alignItems: 'start',
         }}
       >
-        <div
-          style={{
-            border: '1px solid #e5e7eb',
-            borderRadius: 12,
-            overflow: 'hidden',
-            background: '#f8fafc',
-          }}
-        >
+        <div>
           <div
             style={{
-              padding: 12,
-              borderBottom: '1px solid #e2e8f0',
-              background: '#ffffff',
+              border: '1px solid #e5e7eb',
+              borderRadius: 12,
+              overflow: 'hidden',
+              background: '#f8fafc',
             }}
           >
-            <div style={{ fontSize: 14, fontWeight: 600 }}>Figma layout</div>
-            <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-              <a
-                href={FIGMA_COLOR_STYLE_URL}
-                target="_blank"
-                rel="noreferrer"
-                style={{ fontSize: 12, color: '#2563eb' }}
-              >
-                Open in Figma
-              </a>
-              <a
-                href={FIGMA_PRIMITIVE_COLOR_URL}
-                target="_blank"
-                rel="noreferrer"
-                style={{ fontSize: 12, color: '#2563eb' }}
-              >
-                1.1.1 Primitive color
-              </a>
-              <a
-                href={FIGMA_SEMANTIC_COLOR_URL}
-                target="_blank"
-                rel="noreferrer"
-                style={{ fontSize: 12, color: '#2563eb' }}
-              >
-                1.1.2 Semantic color
-              </a>
+            <div
+              style={{
+                padding: 12,
+                borderBottom: '1px solid #e2e8f0',
+                background: '#ffffff',
+              }}
+            >
+              <div style={{ fontSize: 14, fontWeight: 600 }}>Figma layout</div>
+              <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+                <a
+                  href={FIGMA_COLOR_STYLE_URL}
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{ fontSize: 12, color: '#2563eb' }}
+                >
+                  Open in Figma
+                </a>
+                <a
+                  href={FIGMA_PRIMITIVE_COLOR_URL}
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{ fontSize: 12, color: '#2563eb' }}
+                >
+                  1.1.1 Primitive color
+                </a>
+                <a
+                  href={FIGMA_SEMANTIC_COLOR_URL}
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{ fontSize: 12, color: '#2563eb' }}
+                >
+                  1.1.2 Semantic color
+                </a>
+              </div>
+            </div>
+            <div style={{ position: 'relative', paddingTop: '72%' }}>
+              <iframe
+                title="Figma Color Layout"
+                src={`https://www.figma.com/embed?embed_host=storybook&url=${encodeURIComponent(
+                  FIGMA_COLOR_STYLE_URL
+                )}`}
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  width: '100%',
+                  height: '100%',
+                  border: 0,
+                }}
+                allowFullScreen
+              />
             </div>
           </div>
-          <div style={{ position: 'relative', paddingTop: '72%' }}>
-            <iframe
-              title="Figma Color Layout"
-              src={`https://www.figma.com/embed?embed_host=storybook&url=${encodeURIComponent(
-                FIGMA_COLOR_STYLE_URL
-              )}`}
+          <div
+            style={{
+              display: 'grid',
+              gap: 12,
+              marginTop: 12,
+            }}
+          >
+            <div
               style={{
-                position: 'absolute',
-                inset: 0,
-                width: '100%',
-                height: '100%',
-                border: 0,
+                border: '1px solid #e5e7eb',
+                borderRadius: 12,
+                overflow: 'hidden',
+                background: '#ffffff',
               }}
-              allowFullScreen
-            />
+            >
+              <div style={{ padding: 10, borderBottom: '1px solid #e2e8f0' }}>
+                <div style={{ fontSize: 13, fontWeight: 600 }}>
+                  1.1.1 Primitive color
+                </div>
+              </div>
+              <div style={{ position: 'relative', paddingTop: '56%' }}>
+                <iframe
+                  title="Figma Primitive Color Guide"
+                  src={`https://www.figma.com/embed?embed_host=storybook&url=${encodeURIComponent(
+                    FIGMA_PRIMITIVE_COLOR_URL
+                  )}`}
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    width: '100%',
+                    height: '100%',
+                    border: 0,
+                  }}
+                  allowFullScreen
+                />
+              </div>
+            </div>
+            <div
+              style={{
+                border: '1px solid #e5e7eb',
+                borderRadius: 12,
+                overflow: 'hidden',
+                background: '#ffffff',
+              }}
+            >
+              <div style={{ padding: 10, borderBottom: '1px solid #e2e8f0' }}>
+                <div style={{ fontSize: 13, fontWeight: 600 }}>
+                  1.1.2 Semantic color
+                </div>
+              </div>
+              <div style={{ position: 'relative', paddingTop: '56%' }}>
+                <iframe
+                  title="Figma Semantic Color Guide"
+                  src={`https://www.figma.com/embed?embed_host=storybook&url=${encodeURIComponent(
+                    FIGMA_SEMANTIC_COLOR_URL
+                  )}`}
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    width: '100%',
+                    height: '100%',
+                    border: 0,
+                  }}
+                  allowFullScreen
+                />
+              </div>
+            </div>
           </div>
         </div>
         <div>
