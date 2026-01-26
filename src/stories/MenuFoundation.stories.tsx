@@ -1,3 +1,4 @@
+import { useMemo, useState } from 'react'
 import type { Meta, StoryObj } from '@storybook/react'
 import colorTokens from '../tokens/figma/colors.json'
 
@@ -15,6 +16,8 @@ type FlattenedToken = {
   name: string
   value: string
   description?: string
+  variable: string
+  token: string
 }
 
 type SectionProps = {
@@ -40,17 +43,23 @@ const FIGMA_SEMANTIC_COLOR_URL = FIGMA_COLOR_STYLE_URL
 const isTokenValue = (value: TokenGroup | TokenValue): value is TokenValue =>
   typeof value === 'object' && value !== null && 'value' in value
 
+const toCssVariable = (name: string) =>
+  `--color-${name.replace(/\./g, '-').toLowerCase()}`
+
 const flattenTokens = (
   node: TokenGroup,
   path: string[] = []
 ): FlattenedToken[] =>
   Object.entries(node).flatMap(([key, value]) => {
     if (isTokenValue(value)) {
+      const tokenName = [...path, key].join('.')
       return [
         {
-          name: [...path, key].join('.'),
+          name: tokenName,
           value: value.value,
           description: value.description,
+          variable: toCssVariable(tokenName),
+          token: tokenName,
         },
       ]
     }
@@ -64,60 +73,163 @@ const colorTokenRoot = (
 
 const flattenedColorTokens = flattenTokens(colorTokenRoot)
 
-const ColorTokensPage = () => (
-  <div style={{ padding: 16 }}>
-    <div style={{ marginBottom: 12 }}>
-      <h3 style={{ margin: '0 0 4px', fontSize: 16 }}>Colors</h3>
-      <p style={{ margin: 0, color: '#4b5563' }}>
-        Figma color styles are mapped to Storybook tokens.
-      </p>
-      <a
-        href={FIGMA_COLOR_STYLE_URL}
-        target="_blank"
-        rel="noreferrer"
-        style={{ fontSize: 13, color: '#2563eb' }}
+const ColorTokensPage = () => {
+  const [query, setQuery] = useState('')
+
+  const filteredTokens = useMemo(() => {
+    const normalized = query.trim().toLowerCase()
+    if (!normalized) {
+      return flattenedColorTokens
+    }
+    return flattenedColorTokens.filter((token) =>
+      [
+        token.name,
+        token.value,
+        token.variable,
+        token.token,
+        token.description ?? '',
+      ]
+        .join(' ')
+        .toLowerCase()
+        .includes(normalized)
+    )
+  }, [query])
+
+  return (
+    <div style={{ padding: 16 }}>
+      <div style={{ marginBottom: 16 }}>
+        <h3 style={{ margin: '0 0 4px', fontSize: 18 }}>Colors</h3>
+        <p style={{ margin: 0, color: '#4b5563' }}>
+          Figma color styles are mapped to Storybook tokens with per-chip
+          metadata.
+        </p>
+      </div>
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'minmax(280px, 1.1fr) minmax(360px, 1.4fr)',
+          gap: 16,
+          alignItems: 'start',
+        }}
       >
-        Open Figma color styles
-      </a>
-    </div>
-    <div
-      style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
-        gap: 12,
-      }}
-    >
-      {flattenedColorTokens.map((token) => (
         <div
-          key={token.name}
           style={{
             border: '1px solid #e5e7eb',
-            borderRadius: 10,
-            padding: 12,
+            borderRadius: 12,
+            overflow: 'hidden',
+            background: '#f8fafc',
           }}
         >
           <div
             style={{
-              width: 48,
-              height: 48,
-              borderRadius: 8,
-              background: token.value,
-              border: '1px solid #e2e8f0',
-              marginBottom: 8,
+              padding: 12,
+              borderBottom: '1px solid #e2e8f0',
+              background: '#ffffff',
             }}
-          />
-          <div style={{ fontSize: 12, fontWeight: 600 }}>{token.name}</div>
-          <div style={{ fontSize: 12, color: '#475569' }}>{token.value}</div>
-          {token.description && (
-            <div style={{ fontSize: 11, color: '#64748b', marginTop: 4 }}>
-              {token.description}
-            </div>
-          )}
+          >
+            <div style={{ fontSize: 14, fontWeight: 600 }}>Figma layout</div>
+            <a
+              href={FIGMA_COLOR_STYLE_URL}
+              target="_blank"
+              rel="noreferrer"
+              style={{ fontSize: 12, color: '#2563eb' }}
+            >
+              Open in Figma
+            </a>
+          </div>
+          <div style={{ position: 'relative', paddingTop: '72%' }}>
+            <iframe
+              title="Figma Color Layout"
+              src={`https://www.figma.com/embed?embed_host=storybook&url=${encodeURIComponent(
+                FIGMA_COLOR_STYLE_URL
+              )}`}
+              style={{
+                position: 'absolute',
+                inset: 0,
+                width: '100%',
+                height: '100%',
+                border: 0,
+              }}
+              allowFullScreen
+            />
+          </div>
         </div>
-      ))}
+        <div>
+          <div
+            style={{
+              display: 'flex',
+              gap: 12,
+              alignItems: 'center',
+              marginBottom: 12,
+            }}
+          >
+            <input
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+              placeholder="Search name, token, variable, value..."
+              style={{
+                flex: 1,
+                border: '1px solid #e2e8f0',
+                borderRadius: 10,
+                padding: '8px 12px',
+                fontSize: 12,
+              }}
+            />
+            <div style={{ fontSize: 12, color: '#64748b' }}>
+              {filteredTokens.length} tokens
+            </div>
+          </div>
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+              gap: 12,
+            }}
+          >
+            {filteredTokens.map((token) => (
+              <div
+                key={token.name}
+                style={{
+                  border: '1px solid #e5e7eb',
+                  borderRadius: 12,
+                  padding: 12,
+                  background: '#ffffff',
+                }}
+              >
+                <div
+                  style={{
+                    width: 56,
+                    height: 56,
+                    borderRadius: 10,
+                    background: token.value,
+                    border: '1px solid #e2e8f0',
+                    marginBottom: 10,
+                  }}
+                />
+                <div style={{ fontSize: 12, fontWeight: 700 }}>
+                  {token.name}
+                </div>
+                <div style={{ fontSize: 12, color: '#475569' }}>
+                  {token.value}
+                </div>
+                <div style={{ fontSize: 11, color: '#64748b', marginTop: 6 }}>
+                  <div>Name: {token.name}</div>
+                  <div>Variable: {token.variable}</div>
+                  <div>Token: {token.token}</div>
+                </div>
+                {token.description && (
+                  <div style={{ fontSize: 11, color: '#94a3b8', marginTop: 6 }}>
+                    {token.description}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
-)
+  )
+}
 
 const meta: Meta<typeof SectionPage> = {
   title: '1. Foundation',
