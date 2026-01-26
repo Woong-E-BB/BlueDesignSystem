@@ -128,14 +128,32 @@ const ColorTokensPage = () => {
             }}
           >
             <div style={{ fontSize: 14, fontWeight: 600 }}>Figma layout</div>
-            <a
-              href={FIGMA_COLOR_STYLE_URL}
-              target="_blank"
-              rel="noreferrer"
-              style={{ fontSize: 12, color: '#2563eb' }}
-            >
-              Open in Figma
-            </a>
+            <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+              <a
+                href={FIGMA_COLOR_STYLE_URL}
+                target="_blank"
+                rel="noreferrer"
+                style={{ fontSize: 12, color: '#2563eb' }}
+              >
+                Open in Figma
+              </a>
+              <a
+                href={FIGMA_PRIMITIVE_COLOR_URL}
+                target="_blank"
+                rel="noreferrer"
+                style={{ fontSize: 12, color: '#2563eb' }}
+              >
+                1.1.1 Primitive color
+              </a>
+              <a
+                href={FIGMA_SEMANTIC_COLOR_URL}
+                target="_blank"
+                rel="noreferrer"
+                style={{ fontSize: 12, color: '#2563eb' }}
+              >
+                1.1.2 Semantic color
+              </a>
+            </div>
           </div>
           <div style={{ position: 'relative', paddingTop: '72%' }}>
             <iframe
