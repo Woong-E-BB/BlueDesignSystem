@@ -15,24 +15,40 @@ const SectionPage = ({ title, description }: SectionProps) => (
   </div>
 )
 
-const FIGMA_BUTTONS_URL =
-  'https://www.figma.com/design/ec2KdFeSwTGXsQaNySybLO/%EB%B8%94%EB%A3%A8%ED%8C%9C%EC%BD%94%EB%A6%AC%EC%95%84-%EB%94%94%EC%9E%90%EC%9D%B8%EC%8B%9C%EC%8A%A4%ED%85%9C?node-id=2-9&m=dev'
-const FIGMA_INPUT_URL =
-  'https://www.figma.com/design/ec2KdFeSwTGXsQaNySybLO/%EB%B8%94%EB%A3%A8%ED%8C%9C%EC%BD%94%EB%A6%AC%EC%95%84-%EB%94%94%EC%9E%90%EC%9D%B8%EC%8B%9C%EC%8A%A4%ED%85%9C?node-id=3-2&m=dev'
-const FIGMA_MODAL_URL =
-  'https://www.figma.com/design/ec2KdFeSwTGXsQaNySybLO/%EB%B8%94%EB%A3%A8%ED%8C%9C%EC%BD%94%EB%A6%AC%EC%95%84-%EB%94%94%EC%9E%90%EC%9D%B8%EC%8B%9C%EC%8A%A4%ED%85%9C?node-id=3-3&m=dev'
-const FIGMA_CHECKBOX_URL =
-  'https://www.figma.com/design/ec2KdFeSwTGXsQaNySybLO/%EB%B8%94%EB%A3%A8%ED%8C%9C%EC%BD%94%EB%A6%AC%EC%95%84-%EB%94%94%EC%9E%90%EC%9D%B8%EC%8B%9C%EC%8A%A4%ED%85%9C?node-id=36-74&m=dev'
-const FIGMA_RADIOGROUP_URL =
-  'https://www.figma.com/design/ec2KdFeSwTGXsQaNySybLO/%EB%B8%94%EB%A3%A8%ED%8C%9C%EC%BD%94%EB%A6%AC%EC%95%84-%EB%94%94%EC%9E%90%EC%9D%B8%EC%8B%9C%EC%8A%A4%ED%85%9C?node-id=4-481&m=dev'
-const FIGMA_PAGINATION_URL =
-  'https://www.figma.com/design/ec2KdFeSwTGXsQaNySybLO/%EB%B8%94%EB%A3%A8%ED%8C%9C%EC%BD%94%EB%A6%AC%EC%95%84-%EB%94%94%EC%9E%90%EC%9D%B8%EC%8B%9C%EC%8A%A4%ED%85%9C?node-id=4-481&m=dev'
-const FIGMA_TAB_URL =
-  'https://www.figma.com/design/ec2KdFeSwTGXsQaNySybLO/%EB%B8%94%EB%A3%A8%ED%8C%9C%EC%BD%94%EB%A6%AC%EC%95%84-%EB%94%94%EC%9E%90%EC%9D%B8%EC%8B%9C%EC%8A%A4%ED%85%9C?node-id=3-5&m=dev'
-const FIGMA_TOOLTIP_URL =
-  'https://www.figma.com/design/ec2KdFeSwTGXsQaNySybLO/%EB%B8%94%EB%A3%A8%ED%8C%9C%EC%BD%94%EB%A6%AC%EC%95%84-%EB%94%94%EC%9E%90%EC%9D%B8%EC%8B%9C%EC%8A%A4%ED%85%9C?node-id=3-7&m=dev'
-const FIGMA_BADGE_TAG_URL =
-  'https://www.figma.com/design/ec2KdFeSwTGXsQaNySybLO/%EB%B8%94%EB%A3%A8%ED%8C%9C%EC%BD%94%EB%A6%AC%EC%95%84-%EB%94%94%EC%9E%90%EC%9D%B8%EC%8B%9C%EC%8A%A4%ED%85%9C?node-id=3-8&m=dev'
+const FIGMA_BASE_URL =
+  'https://www.figma.com/design/ec2KdFeSwTGXsQaNySybLO/블루팜코리아-디자인시스템'
+
+const figmaUrl = (nodeId: string) => `${FIGMA_BASE_URL}?node-id=${nodeId}&m=dev`
+
+const FIGMA_BUTTONS_URL = figmaUrl('2-9')
+const FIGMA_BUTTONS_LAYER_1_URL = figmaUrl('245-2274')
+const FIGMA_BUTTONS_LAYER_2_URL = figmaUrl('247-2855')
+const FIGMA_BUTTONS_LAYER_3_URL = figmaUrl('252-738')
+const FIGMA_BUTTONS_LAYER_4_URL = figmaUrl('252-801')
+const FIGMA_INPUT_URL = figmaUrl('3-2')
+const FIGMA_INPUT_LAYER_1_URL = figmaUrl('140-456')
+const FIGMA_MODAL_URL = figmaUrl('3-3')
+const FIGMA_MODAL_LAYER_1_URL = figmaUrl('516-2156')
+const FIGMA_MODAL_LAYER_2_URL = figmaUrl('516-1885')
+const FIGMA_MODAL_LAYER_3_URL = figmaUrl('516-1562')
+const FIGMA_CHECKBOX_URL = figmaUrl('36-74')
+const FIGMA_CHECKBOX_LAYER_1_URL = figmaUrl('147-297')
+const FIGMA_RADIOGROUP_URL = figmaUrl('4-481')
+const FIGMA_RADIOGROUP_LAYER_1_URL = figmaUrl('480-819')
+const FIGMA_PAGINATION_URL = figmaUrl('4-481')
+const FIGMA_PAGINATION_LAYER_1_URL = figmaUrl('512-2095')
+const FIGMA_TAB_URL = figmaUrl('3-5')
+const FIGMA_TAB_LAYER_1_URL = figmaUrl('589-3315')
+const FIGMA_TAB_LAYER_2_URL = figmaUrl('623-606')
+const FIGMA_TOOLTIP_URL = figmaUrl('3-7')
+const FIGMA_TOOLTIP_LAYER_1_URL = figmaUrl('382-1395')
+const FIGMA_TOOLTIP_LAYER_2_URL = figmaUrl('382-3104')
+const FIGMA_BADGE_TAG_URL = figmaUrl('3-8')
+const FIGMA_BADGE_TAG_LAYER_1_URL = figmaUrl('407-326')
+const FIGMA_BADGE_TAG_LAYER_2_URL = figmaUrl('407-1044')
+const FIGMA_BADGE_TAG_LAYER_3_URL = figmaUrl('412-1430')
+const FIGMA_BADGE_TAG_LAYER_4_URL = figmaUrl('431-1071')
+
 const meta: Meta<typeof SectionPage> = {
   title: '2. Components',
   component: SectionPage,
@@ -52,6 +68,12 @@ export const Buttons: Story = {
       title="Buttons"
       description="Primary, secondary, and utility button patterns."
       figmaUrl={FIGMA_BUTTONS_URL}
+      figmaFrames={[
+        { title: 'layers1', url: FIGMA_BUTTONS_LAYER_1_URL },
+        { title: 'layers2', url: FIGMA_BUTTONS_LAYER_2_URL },
+        { title: 'layers3', url: FIGMA_BUTTONS_LAYER_3_URL },
+        { title: 'layers4', url: FIGMA_BUTTONS_LAYER_4_URL },
+      ]}
     />
   ),
 }
@@ -63,6 +85,7 @@ export const Input: Story = {
       title="Input"
       description="Text fields, states, and validation rules."
       figmaUrl={FIGMA_INPUT_URL}
+      figmaFrames={[{ title: 'layers1', url: FIGMA_INPUT_LAYER_1_URL }]}
     />
   ),
 }
@@ -74,6 +97,11 @@ export const Modal: Story = {
       title="Modal"
       description="Dialog behaviors, sizes, and accessibility requirements."
       figmaUrl={FIGMA_MODAL_URL}
+      figmaFrames={[
+        { title: 'layers1', url: FIGMA_MODAL_LAYER_1_URL },
+        { title: 'layers2', url: FIGMA_MODAL_LAYER_2_URL },
+        { title: 'layers3', url: FIGMA_MODAL_LAYER_3_URL },
+      ]}
     />
   ),
 }
@@ -85,6 +113,7 @@ export const Checkbox: Story = {
       title="Checkbox"
       description="Checkbox styles and grouping conventions."
       figmaUrl={FIGMA_CHECKBOX_URL}
+      figmaFrames={[{ title: 'layers1', url: FIGMA_CHECKBOX_LAYER_1_URL }]}
     />
   ),
 }
@@ -96,6 +125,7 @@ export const RadioGroup: Story = {
       title="RadioGroup"
       description="Radio inputs and grouping behaviors."
       figmaUrl={FIGMA_RADIOGROUP_URL}
+      figmaFrames={[{ title: 'layers1', url: FIGMA_RADIOGROUP_LAYER_1_URL }]}
     />
   ),
 }
@@ -107,6 +137,7 @@ export const Pagination: Story = {
       title="Pagination"
       description="Pagination patterns for lists and tables."
       figmaUrl={FIGMA_PAGINATION_URL}
+      figmaFrames={[{ title: 'layers1', url: FIGMA_PAGINATION_LAYER_1_URL }]}
     />
   ),
 }
@@ -126,6 +157,10 @@ export const Tab: Story = {
       title="Tab"
       description="Tabs layout, states, and responsive rules."
       figmaUrl={FIGMA_TAB_URL}
+      figmaFrames={[
+        { title: 'layers1', url: FIGMA_TAB_LAYER_1_URL },
+        { title: 'layers2', url: FIGMA_TAB_LAYER_2_URL },
+      ]}
     />
   ),
 }
@@ -137,6 +172,10 @@ export const Tooltip: Story = {
       title="Tooltip"
       description="Tooltip trigger rules and positioning."
       figmaUrl={FIGMA_TOOLTIP_URL}
+      figmaFrames={[
+        { title: 'layers1', url: FIGMA_TOOLTIP_LAYER_1_URL },
+        { title: 'layers2', url: FIGMA_TOOLTIP_LAYER_2_URL },
+      ]}
     />
   ),
 }
@@ -148,6 +187,12 @@ export const BadgeAndTag: Story = {
       title="Badge & Tag"
       description="Badge and tag styles, color usage, and states."
       figmaUrl={FIGMA_BADGE_TAG_URL}
+      figmaFrames={[
+        { title: 'layers1', url: FIGMA_BADGE_TAG_LAYER_1_URL },
+        { title: 'layers2', url: FIGMA_BADGE_TAG_LAYER_2_URL },
+        { title: 'layers3', url: FIGMA_BADGE_TAG_LAYER_3_URL },
+        { title: 'layers4', url: FIGMA_BADGE_TAG_LAYER_4_URL },
+      ]}
     />
   ),
 }

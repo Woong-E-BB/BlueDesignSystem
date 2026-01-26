@@ -19,7 +19,6 @@ type FlattenedToken = {
   description?: string
   variable: string
   token: string
-  group: string
 }
 
 type SectionProps = {
@@ -36,20 +35,23 @@ const SectionPage = ({ title, description }: SectionProps) => (
   </div>
 )
 
-const FIGMA_COLOR_STYLE_URL =
-  'https://www.figma.com/design/ec2KdFeSwTGXsQaNySybLO/%EB%B8%94%EB%A3%A8%ED%8C%9C%EC%BD%94%EB%A6%AC%EC%95%84-%EB%94%94%EC%9E%90%EC%9D%B8%EC%8B%9C%EC%8A%A4%ED%85%9C?node-id=13-184&m=dev'
+const FIGMA_BASE_URL =
+  'https://www.figma.com/design/ec2KdFeSwTGXsQaNySybLO/블루팜코리아-디자인시스템'
 
-const FIGMA_PRIMITIVE_COLOR_URL = FIGMA_COLOR_STYLE_URL
-const FIGMA_SEMANTIC_COLOR_URL =
-  'https://www.figma.com/design/ec2KdFeSwTGXsQaNySybLO/%EB%B8%94%EB%A3%A8%ED%8C%9C%EC%BD%94%EB%A6%AC%EC%95%84-%EB%94%94%EC%9E%90%EC%9D%B8%EC%8B%9C%EC%8A%A4%ED%85%9C?node-id=265-936&m=dev'
-const FIGMA_TYPOGRAPHY_URL =
-  'https://www.figma.com/design/ec2KdFeSwTGXsQaNySybLO/%EB%B8%94%EB%A3%A8%ED%8C%9C%EC%BD%94%EB%A6%AC%EC%95%84-%EB%94%94%EC%9E%90%EC%9D%B8%EC%8B%9C%EC%8A%A4%ED%85%9C?node-id=2-5&m=dev'
-const FIGMA_GRID_URL =
-  'https://www.figma.com/design/ec2KdFeSwTGXsQaNySybLO/%EB%B8%94%EB%A3%A8%ED%8C%9C%EC%BD%94%EB%A6%AC%EC%95%84-%EB%94%94%EC%9E%90%EC%9D%B8%EC%8B%9C%EC%8A%A4%ED%85%9C?node-id=2-6&m=dev'
-const FIGMA_ICON_URL =
-  'https://www.figma.com/design/ec2KdFeSwTGXsQaNySybLO/%EB%B8%94%EB%A3%A8%ED%8C%9C%EC%BD%94%EB%A6%AC%EC%95%84-%EB%94%94%EC%9E%90%EC%9D%B8%EC%8B%9C%EC%8A%A4%ED%85%9C?node-id=2-7&m=dev'
-const FIGMA_RADIUS_URL =
-  'https://www.figma.com/design/ec2KdFeSwTGXsQaNySybLO/%EB%B8%94%EB%A3%A8%ED%8C%9C%EC%BD%94%EB%A6%AC%EC%95%84-%EB%94%94%EC%9E%90%EC%9D%B8%EC%8B%9C%EC%8A%A4%ED%85%9C?node-id=3-9&m=dev'
+const figmaUrl = (nodeId: string) => `${FIGMA_BASE_URL}?node-id=${nodeId}&m=dev`
+
+const FIGMA_COLOR_STYLE_URL = figmaUrl('2-4')
+const FIGMA_COLOR_LAYER_1_URL = figmaUrl('13-184')
+const FIGMA_COLOR_LAYER_2_URL = figmaUrl('265-936')
+const FIGMA_TYPOGRAPHY_URL = figmaUrl('2-5')
+const FIGMA_TYPOGRAPHY_LAYER_1_URL = figmaUrl('86-364')
+const FIGMA_GRID_URL = figmaUrl('2-6')
+const FIGMA_GRID_LAYER_1_URL = figmaUrl('16-251')
+const FIGMA_GRID_LAYER_2_URL = figmaUrl('16-714')
+const FIGMA_ICON_URL = figmaUrl('2-7')
+const FIGMA_ICON_LAYER_1_URL = figmaUrl('556-2392')
+const FIGMA_RADIUS_URL = figmaUrl('3-9')
+const FIGMA_RADIUS_LAYER_1_URL = figmaUrl('108-83')
 
 const isTokenValue = (value: TokenGroup | TokenValue): value is TokenValue =>
   typeof value === 'object' && value !== null && 'value' in value
@@ -64,7 +66,6 @@ const flattenTokens = (
   Object.entries(node).flatMap(([key, value]) => {
     if (isTokenValue(value)) {
       const tokenName = [...path, key].join('.')
-      const groupName = path[0] ?? tokenName
       return [
         {
           name: tokenName,
@@ -72,7 +73,6 @@ const flattenTokens = (
           description: value.description,
           variable: toCssVariable(tokenName),
           token: tokenName,
-          group: groupName,
         },
       ]
     }
@@ -86,7 +86,7 @@ const colorTokenRoot = (
 
 const flattenedColorTokens = flattenTokens(colorTokenRoot)
 
-type RelatedEmbed = {
+type FigmaFrame = {
   title: string
   url: string
 }
@@ -96,12 +96,7 @@ type ColorTokensPageProps = {
   description?: string
   figmaUrl: string
   tokens: FlattenedToken[]
-  relatedEmbeds?: RelatedEmbed[]
-}
-
-const filterByGroups = (tokens: FlattenedToken[], groups: string[]) => {
-  const allowed = new Set(groups.map((group) => group.toLowerCase()))
-  return tokens.filter((token) => allowed.has(token.group.toLowerCase()))
+  figmaFrames?: FigmaFrame[]
 }
 
 const ColorTokensPage = ({
@@ -109,9 +104,11 @@ const ColorTokensPage = ({
   description,
   figmaUrl,
   tokens,
-  relatedEmbeds = [],
+  figmaFrames = [],
 }: ColorTokensPageProps) => {
   const [query, setQuery] = useState('')
+  const resolvedFrames =
+    figmaFrames.length > 0 ? figmaFrames : [{ title: 'Main frame', url: figmaUrl }]
 
   const filteredTokens = useMemo(() => {
     const normalized = query.trim().toLowerCase()
@@ -130,7 +127,7 @@ const ColorTokensPage = ({
         .toLowerCase()
         .includes(normalized)
     )
-  }, [query])
+  }, [query, tokens])
 
   return (
     <div style={{ padding: 16 }}>
@@ -149,62 +146,58 @@ const ColorTokensPage = ({
           alignItems: 'start',
         }}
       >
-        <div>
-          <div
-            style={{
-              border: '1px solid #e5e7eb',
-              borderRadius: 12,
-              overflow: 'hidden',
-              background: '#f8fafc',
-            }}
-          >
+        <div style={{ display: 'grid', gap: 12 }}>
+          {resolvedFrames.map((frame) => (
             <div
+              key={frame.title}
               style={{
-                padding: 12,
-                borderBottom: '1px solid #e2e8f0',
-                background: '#ffffff',
+                border: '1px solid #e5e7eb',
+                borderRadius: 12,
+                overflow: 'hidden',
+                background: '#f8fafc',
               }}
             >
-              <div style={{ fontSize: 14, fontWeight: 600 }}>Figma layout</div>
-              <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+              <div
+                style={{
+                  padding: 12,
+                  borderBottom: '1px solid #e2e8f0',
+                  background: '#ffffff',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  gap: 12,
+                  flexWrap: 'wrap',
+                }}
+              >
+                <div style={{ fontSize: 14, fontWeight: 600 }}>
+                  {frame.title}
+                </div>
                 <a
-                  href={figmaUrl}
+                  href={frame.url}
                   target="_blank"
                   rel="noreferrer"
                   style={{ fontSize: 12, color: '#2563eb' }}
                 >
                   Open in Figma
                 </a>
-                {relatedEmbeds.map((embed) => (
-                  <a
-                    key={embed.title}
-                    href={embed.url}
-                    target="_blank"
-                    rel="noreferrer"
-                    style={{ fontSize: 12, color: '#2563eb' }}
-                  >
-                    {embed.title}
-                  </a>
-                ))}
+              </div>
+              <div style={{ position: 'relative', paddingTop: '64%' }}>
+                <iframe
+                  title={`Figma ${title} ${frame.title}`}
+                  src={`https://www.figma.com/embed?embed_host=storybook&url=${encodeURIComponent(
+                    frame.url
+                  )}`}
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    width: '100%',
+                    height: '100%',
+                    border: 0,
+                  }}
+                  allowFullScreen
+                />
               </div>
             </div>
-            <div style={{ position: 'relative', paddingTop: '72%' }}>
-              <iframe
-                title={`Figma ${title} Layout`}
-                src={`https://www.figma.com/embed?embed_host=storybook&url=${encodeURIComponent(
-                  figmaUrl
-                )}`}
-                style={{
-                  position: 'absolute',
-                  inset: 0,
-                  width: '100%',
-                  height: '100%',
-                  border: 0,
-                }}
-                allowFullScreen
-              />
-            </div>
-          </div>
+          ))}
         </div>
         <div>
           <div
@@ -302,32 +295,10 @@ export const Colors: Story = {
       title="Colors"
       figmaUrl={FIGMA_COLOR_STYLE_URL}
       tokens={flattenedColorTokens}
-      relatedEmbeds={[
-        { title: '1.1.1 Primitive color', url: FIGMA_PRIMITIVE_COLOR_URL },
-        { title: '1.1.2 Semantic color', url: FIGMA_SEMANTIC_COLOR_URL },
+      figmaFrames={[
+        { title: 'layers1', url: FIGMA_COLOR_LAYER_1_URL },
+        { title: 'layers2', url: FIGMA_COLOR_LAYER_2_URL },
       ]}
-    />
-  ),
-}
-
-export const PrimitiveColor: Story = {
-  name: '1.1.1 Primitive color',
-  render: () => (
-    <ColorTokensPage
-      title="Primitive color"
-      figmaUrl={FIGMA_PRIMITIVE_COLOR_URL}
-      tokens={filterByGroups(flattenedColorTokens, ['brand', 'neutral'])}
-    />
-  ),
-}
-
-export const SemanticColor: Story = {
-  name: '1.1.2 Semantic color',
-  render: () => (
-    <ColorTokensPage
-      title="Semantic color"
-      figmaUrl={FIGMA_SEMANTIC_COLOR_URL}
-      tokens={filterByGroups(flattenedColorTokens, ['status'])}
     />
   ),
 }
@@ -339,6 +310,7 @@ export const Typography: Story = {
       title="Typography"
       description="Type scale, font stacks, and text styles."
       figmaUrl={FIGMA_TYPOGRAPHY_URL}
+      figmaFrames={[{ title: 'layers1', url: FIGMA_TYPOGRAPHY_LAYER_1_URL }]}
     />
   ),
 }
@@ -350,6 +322,10 @@ export const Grid: Story = {
       title="Grid"
       description="Layout grid rules and responsive breakpoints."
       figmaUrl={FIGMA_GRID_URL}
+      figmaFrames={[
+        { title: 'layers1', url: FIGMA_GRID_LAYER_1_URL },
+        { title: 'layers2', url: FIGMA_GRID_LAYER_2_URL },
+      ]}
     />
   ),
 }
@@ -361,6 +337,7 @@ export const Icon: Story = {
       title="Icon"
       description="Icon library usage and sizing rules."
       figmaUrl={FIGMA_ICON_URL}
+      figmaFrames={[{ title: 'layers1', url: FIGMA_ICON_LAYER_1_URL }]}
     />
   ),
 }
@@ -372,6 +349,7 @@ export const Radius: Story = {
       title="Radius"
       description="Corner radius scale and application examples."
       figmaUrl={FIGMA_RADIUS_URL}
+      figmaFrames={[{ title: 'layers1', url: FIGMA_RADIUS_LAYER_1_URL }]}
     />
   ),
 }
