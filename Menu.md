@@ -7,6 +7,7 @@
 
 **1. Foundation**
 - 1.1 Colors  
+- 1.1.1 Primitive color  
 - 1.2 Typography  
 - 1.3 Grid  
 - 1.4 Icon  
@@ -33,6 +34,7 @@
 | Menu | Storybook menu | Path (Figma URL) | Tokens JSON |
 | --- | --- | --- | --- |
 | 1.1 Colors | `1. Foundation / 1.1 Colors` | `https://www.figma.com/design/ec2KdFeSwTGXsQaNySybLO/%EB%B8%94%EB%A3%A8%ED%8C%9C%EC%BD%94%EB%A6%AC%EC%95%84-%EB%94%94%EC%9E%90%EC%9D%B8%EC%8B%9C%EC%8A%A4%ED%85%9C?node-id=13-184&m=dev` | `src/tokens/figma/colors.json` |
+| 1.1.1 Primitive color | `1. Foundation / 1.1.1 Primitive color` | `https://www.figma.com/design/ec2KdFeSwTGXsQaNySybLO/%EB%B8%94%EB%A3%A8%ED%8C%9C%EC%BD%94%EB%A6%AC%EC%95%84-%EB%94%94%EC%9E%90%EC%9D%B8%EC%8B%9C%EC%8A%A4%ED%85%9C?node-id=13-184&m=dev` | `src/tokens/figma/colors.json` |
 
 Notes:
 - Export Figma color styles to JSON (Tokens Studio or Figma plugin) and save as `src/tokens/figma/colors.json`.
