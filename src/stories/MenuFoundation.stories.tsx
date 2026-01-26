@@ -1,4 +1,21 @@
 import type { Meta, StoryObj } from '@storybook/react'
+import colorTokens from '../tokens/figma/colors.json'
+
+type TokenValue = {
+  value: string
+  type?: string
+  description?: string
+}
+
+type TokenGroup = {
+  [key: string]: TokenGroup | TokenValue
+}
+
+type FlattenedToken = {
+  name: string
+  value: string
+  description?: string
+}
 
 type SectionProps = {
   title: string
@@ -11,6 +28,91 @@ const SectionPage = ({ title, description }: SectionProps) => (
     <p style={{ margin: 0, color: '#4b5563' }}>
       {description ?? 'Content will be connected to this menu item.'}
     </p>
+  </div>
+)
+
+const FIGMA_COLOR_STYLE_URL =
+  'https://www.figma.com/design/ec2KdFeSwTGXsQaNySybLO/%EB%B8%94%EB%A3%A8%ED%8C%9C%EC%BD%94%EB%A6%AC%EC%95%84-%EB%94%94%EC%9E%90%EC%9D%B8%EC%8B%9C%EC%8A%A4%ED%85%9C?node-id=13-184&m=dev'
+
+const isTokenValue = (value: TokenGroup | TokenValue): value is TokenValue =>
+  typeof value === 'object' && value !== null && 'value' in value
+
+const flattenTokens = (
+  node: TokenGroup,
+  path: string[] = []
+): FlattenedToken[] =>
+  Object.entries(node).flatMap(([key, value]) => {
+    if (isTokenValue(value)) {
+      return [
+        {
+          name: [...path, key].join('.'),
+          value: value.value,
+          description: value.description,
+        },
+      ]
+    }
+
+    return flattenTokens(value, [...path, key])
+  })
+
+const colorTokenRoot = (
+  (colorTokens as TokenGroup).color ?? (colorTokens as TokenGroup)
+) as TokenGroup
+
+const flattenedColorTokens = flattenTokens(colorTokenRoot)
+
+const ColorTokensPage = () => (
+  <div style={{ padding: 16 }}>
+    <div style={{ marginBottom: 12 }}>
+      <h3 style={{ margin: '0 0 4px', fontSize: 16 }}>Colors</h3>
+      <p style={{ margin: 0, color: '#4b5563' }}>
+        Figma color styles are mapped to Storybook tokens.
+      </p>
+      <a
+        href={FIGMA_COLOR_STYLE_URL}
+        target="_blank"
+        rel="noreferrer"
+        style={{ fontSize: 13, color: '#2563eb' }}
+      >
+        Open Figma color styles
+      </a>
+    </div>
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
+        gap: 12,
+      }}
+    >
+      {flattenedColorTokens.map((token) => (
+        <div
+          key={token.name}
+          style={{
+            border: '1px solid #e5e7eb',
+            borderRadius: 10,
+            padding: 12,
+          }}
+        >
+          <div
+            style={{
+              width: 48,
+              height: 48,
+              borderRadius: 8,
+              background: token.value,
+              border: '1px solid #e2e8f0',
+              marginBottom: 8,
+            }}
+          />
+          <div style={{ fontSize: 12, fontWeight: 600 }}>{token.name}</div>
+          <div style={{ fontSize: 12, color: '#475569' }}>{token.value}</div>
+          {token.description && (
+            <div style={{ fontSize: 11, color: '#64748b', marginTop: 4 }}>
+              {token.description}
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
   </div>
 )
 
@@ -28,10 +130,7 @@ type Story = StoryObj<typeof SectionPage>
 
 export const Colors: Story = {
   name: '1.1 Colors',
-  args: {
-    title: 'Colors',
-    description: 'Palette definitions, usage, and accessibility guidance.',
-  },
+  render: () => <ColorTokensPage />,
 }
 
 export const Typography: Story = {

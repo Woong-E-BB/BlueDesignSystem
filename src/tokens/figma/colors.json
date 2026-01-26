@@ -1,0 +1,55 @@
+{
+  "color": {
+    "brand": {
+      "primary": {
+        "value": "#2563EB",
+        "type": "color",
+        "description": "Primary brand color."
+      },
+      "primaryHover": {
+        "value": "#1D4ED8",
+        "type": "color",
+        "description": "Primary hover state."
+      },
+      "primaryActive": {
+        "value": "#1E40AF",
+        "type": "color",
+        "description": "Primary active state."
+      }
+    },
+    "neutral": {
+      "0": {
+        "value": "#FFFFFF",
+        "type": "color",
+        "description": "Surface base."
+      },
+      "50": {
+        "value": "#F8FAFC",
+        "type": "color",
+        "description": "Subtle background."
+      },
+      "900": {
+        "value": "#0F172A",
+        "type": "color",
+        "description": "Primary text."
+      }
+    },
+    "status": {
+      "success": {
+        "value": "#16A34A",
+        "type": "color",
+        "description": "Success state."
+      },
+      "warning": {
+        "value": "#F59E0B",
+        "type": "color",
+        "description": "Warning state."
+      },
+      "danger": {
+        "value": "#DC2626",
+        "type": "color",
+        "description": "Error state."
+      }
+    }
+  }
+}
