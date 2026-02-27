@@ -73,6 +73,7 @@ const FigmaEmbedLayout = ({
   figmaFrames: FigmaFrame[]
 }) => {
   const [query, setQuery] = useState('')
+  const [exportTab, setExportTab] = useState<'json' | 'css' | 'ts'>('json')
   const filteredTokens = useMemo(() => {
     const normalized = query.trim().toLowerCase()
     if (!normalized) {
@@ -196,6 +197,76 @@ const FigmaEmbedLayout = ({
                 준비중
               </div>
             )}
+          </div>
+          <div
+            style={{
+              border: '1px solid #e2e8f0',
+              borderRadius: 12,
+              padding: 12,
+              background: '#ffffff',
+              marginBottom: 12,
+            }}
+          >
+            <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 8 }}>
+              Exports
+            </div>
+            <div style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
+              {(['json', 'css', 'ts'] as const).map((tab) => (
+                <button
+                  key={tab}
+                  type="button"
+                  onClick={() => setExportTab(tab)}
+                  style={{
+                    border: '1px solid #e2e8f0',
+                    borderRadius: 8,
+                    padding: '4px 8px',
+                    fontSize: 12,
+                    background: exportTab === tab ? '#e2e8f0' : '#ffffff',
+                    cursor: 'pointer',
+                  }}
+                >
+                  {tab.toUpperCase()}
+                </button>
+              ))}
+            </div>
+            <textarea
+              readOnly
+              value={
+                tokens.length === 0
+                  ? '준비중'
+                  : exportTab === 'json'
+                  ? JSON.stringify(
+                      tokens.map((token) => ({
+                        name: token.name,
+                        variable: token.variable,
+                        token: token.token,
+                      })),
+                      null,
+                      2
+                    )
+                  : exportTab === 'css'
+                  ? tokens.map((token) => `${token.variable}: var(${token.variable});`).join('\n')
+                  : [
+                      'export const tokens = {',
+                      ...tokens.map(
+                        (token) =>
+                          `  '${token.token}': { name: '${token.name}', variable: '${token.variable}' },`
+                      ),
+                      '} as const',
+                    ].join('\n')
+              }
+              style={{
+                width: '100%',
+                minHeight: 140,
+                fontSize: 11,
+                fontFamily:
+                  'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+                border: '1px solid #e2e8f0',
+                borderRadius: 8,
+                padding: 8,
+                background: '#f8fafc',
+              }}
+            />
           </div>
           {tokens.length > 0 && (
             <div

@@ -36,7 +36,7 @@ const SectionPage = ({ title, description }: SectionProps) => (
 )
 
 const FIGMA_BASE_URL =
-  'https://www.figma.com/design/ec2KdFeSwTGXsQaNySybLO/블루팜코리아-디자인시스템'
+  'https://www.figma.com/design/ec2KdFeSwTGXsQaNySybLO/%EB%B8%94%EB%A3%A8%ED%8C%9C%EC%BD%94%EB%A6%AC%EC%95%84-%EB%94%94%EC%9E%90%EC%9D%B8%EC%8B%9C%EC%8A%A4%ED%85%9C'
 
 const figmaUrl = (nodeId: string) => `${FIGMA_BASE_URL}?node-id=${nodeId}&m=dev`
 
@@ -99,6 +99,38 @@ type ColorTokensPageProps = {
   figmaFrames?: FigmaFrame[]
 }
 
+type ExportTab = 'json' | 'css' | 'ts'
+
+const buildJsonExport = (tokens: FlattenedToken[]) =>
+  JSON.stringify(
+    tokens.map((token) => ({
+      name: token.name,
+      variable: token.variable,
+      token: token.token,
+      value: token.value,
+      description: token.description ?? '',
+    })),
+    null,
+    2
+  )
+
+const buildCssExport = (tokens: FlattenedToken[]) =>
+  [
+    ':root {',
+    ...tokens.map((token) => `  ${token.variable}: ${token.value};`),
+    '}',
+  ].join('\n')
+
+const buildTsExport = (tokens: FlattenedToken[]) =>
+  [
+    'export const colorTokens = {',
+    ...tokens.map(
+      (token) =>
+        `  '${token.token}': { name: '${token.name}', variable: '${token.variable}', value: '${token.value}' },`
+    ),
+    '} as const',
+  ].join('\n')
+
 const ColorTokensPage = ({
   title,
   description,
@@ -107,8 +139,15 @@ const ColorTokensPage = ({
   figmaFrames = [],
 }: ColorTokensPageProps) => {
   const [query, setQuery] = useState('')
+  const [exportTab, setExportTab] = useState<ExportTab>('json')
   const resolvedFrames =
     figmaFrames.length > 0 ? figmaFrames : [{ title: 'Main frame', url: figmaUrl }]
+  const exportContent =
+    exportTab === 'json'
+      ? buildJsonExport(tokens)
+      : exportTab === 'css'
+      ? buildCssExport(tokens)
+      : buildTsExport(tokens)
 
   const filteredTokens = useMemo(() => {
     const normalized = query.trim().toLowerCase()
@@ -223,6 +262,52 @@ const ColorTokensPage = ({
             <div style={{ fontSize: 12, color: '#64748b' }}>
               {filteredTokens.length} tokens
             </div>
+          </div>
+          <div
+            style={{
+              border: '1px solid #e2e8f0',
+              borderRadius: 12,
+              padding: 12,
+              background: '#ffffff',
+              marginBottom: 12,
+            }}
+          >
+            <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 8 }}>
+              Exports
+            </div>
+            <div style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
+              {(['json', 'css', 'ts'] as ExportTab[]).map((tab) => (
+                <button
+                  key={tab}
+                  type="button"
+                  onClick={() => setExportTab(tab)}
+                  style={{
+                    border: '1px solid #e2e8f0',
+                    borderRadius: 8,
+                    padding: '4px 8px',
+                    fontSize: 12,
+                    background: exportTab === tab ? '#e2e8f0' : '#ffffff',
+                    cursor: 'pointer',
+                  }}
+                >
+                  {tab.toUpperCase()}
+                </button>
+              ))}
+            </div>
+            <textarea
+              readOnly
+              value={exportContent}
+              style={{
+                width: '100%',
+                minHeight: 140,
+                fontSize: 11,
+                fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+                border: '1px solid #e2e8f0',
+                borderRadius: 8,
+                padding: 8,
+                background: '#f8fafc',
+              }}
+            />
           </div>
           <div
             style={{

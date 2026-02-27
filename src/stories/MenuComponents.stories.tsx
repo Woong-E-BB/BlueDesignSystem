@@ -16,7 +16,7 @@ const SectionPage = ({ title, description }: SectionProps) => (
 )
 
 const FIGMA_BASE_URL =
-  'https://www.figma.com/design/ec2KdFeSwTGXsQaNySybLO/블루팜코리아-디자인시스템'
+  'https://www.figma.com/design/ec2KdFeSwTGXsQaNySybLO/%EB%B8%94%EB%A3%A8%ED%8C%9C%EC%BD%94%EB%A6%AC%EC%95%84-%EB%94%94%EC%9E%90%EC%9D%B8%EC%8B%9C%EC%8A%A4%ED%85%9C'
 
 const figmaUrl = (nodeId: string) => `${FIGMA_BASE_URL}?node-id=${nodeId}&m=dev`
 
